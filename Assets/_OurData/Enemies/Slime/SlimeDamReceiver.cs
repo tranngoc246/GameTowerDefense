@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class SlimeDamReceiver : DamageReceiver
 {
-    private void Reset()
+    protected override void ResetValue()
     {
+        base.ResetValue();
         this.HP = 2;
         this.MaxHP = 2;
     }

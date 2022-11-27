@@ -6,5 +6,5 @@ public class HeroProfile : MonoBehaviour
 {
     [SerializeField] protected string heroClass = "Hero";
 
-    public string HeroClass { get => heroClass;}
+    public string HeroClass() { return this.heroClass; }
 }

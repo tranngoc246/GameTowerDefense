@@ -8,6 +8,7 @@ public class ObjPoolManager : AutoLoadComponent
     public static ObjPoolManager Ins;
     [SerializeField] protected string poolName = "ObjPool";
     [SerializeField] protected List<Transform> objs = new();
+    [SerializeField] protected List<PrefabPool> prefabPools = new();
     [SerializeField] protected SpawnPool pool;
 
     private void Awake()
@@ -57,7 +58,11 @@ public class ObjPoolManager : AutoLoadComponent
                 preloadAmount = 1
             };
             bool isAlreadyPool = this.pool.GetPrefabPool(prefabPool.prefab) == null;
-            if (isAlreadyPool) this.pool.CreatePrefabPool(prefabPool);
+            if (isAlreadyPool)
+            {
+                this.pool.CreatePrefabPool(prefabPool);
+                this.prefabPools.Add(prefabPool);
+            }
         }
     }
 
@@ -84,6 +89,16 @@ public class ObjPoolManager : AutoLoadComponent
 
     public virtual void Despawm(Transform instance)
     {
+        for (int i = 0; i < this.prefabPools.Count; i++)
+        {
+            PrefabPool prefabPool = this.prefabPools[i];
+            if (prefabPool.despawned.Contains(instance))
+            {
+                Debug.LogWarning("despawned.Contains: " + instance.name);
+                return;
+            }
+        }
+
         this.Pool().Despawn(instance);
     }
 }

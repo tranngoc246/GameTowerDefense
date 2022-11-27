@@ -24,9 +24,9 @@ public class PlayerMovement : AutoLoadComponent
     [SerializeField] protected bool jumping = false;
 
     [Header("Input")]
-    [SerializeField] protected float inputHorizontalRaw = 0;
-    [SerializeField] protected float inputVerticalRaw = 0;
-    [SerializeField] protected float inputJumpRaw = 0;
+    public float inputHorizontalRaw = 0;
+    public float inputVerticalRaw = 0;
+    public float inputJumpRaw = 0;
     [SerializeField] protected bool pressJump = false;
 
     [Header("Vectors")]
@@ -102,10 +102,6 @@ public class PlayerMovement : AutoLoadComponent
     protected virtual Vector2 InputToDirection()
     {
         Vector2 direction = Vector2.zero;
-
-        this.inputHorizontalRaw = Input.GetAxisRaw("Horizontal");
-        this.inputVerticalRaw = Input.GetAxisRaw("Vertical");
-        this.inputJumpRaw = Input.GetAxisRaw("Jump");
 
         direction.x = this.inputHorizontalRaw;
         direction.y = this.inputVerticalRaw;

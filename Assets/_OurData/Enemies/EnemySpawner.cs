@@ -5,40 +5,30 @@ using UnityEngine;
 public class EnemySpawner : Spawner
 {
     [Header("Enemy")]
-    [SerializeField] protected List<Transform> spawnPos;
     [SerializeField] protected List<string> nameEnemies;
     [SerializeField] protected Transform target;
 
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadTarget();
+    }
     protected override void ResetValue()
     {
         base.ResetValue();
         this.nameEnemies.Add("Turtle");
     }
 
-    protected override void LoadComponents()
+    protected virtual void LoadTarget()
     {
-        base.LoadComponents();
-        this.LoadSpawnPos();
-    }
+        if (this.target) return;
 
-    protected virtual void LoadSpawnPos()
-    {
-        if (this.spawnPos.Count > 0) return;
-        foreach(Transform child in transform)
-        {
-            this.spawnPos.Add(child);
-            child.gameObject.SetActive(false);
-        }
-
-        Debug.Log(transform.name + ": LoadSpawnPos");
+        this.target = GameObject.Find("EnemyGate1").transform;
     }
 
     protected override Vector3 SpawnPos()
     {
-        int rand = Random.Range(0, this.spawnPos.Count);
-        Transform pos = this.spawnPos[rand];
-
-        return pos.position;
+        return SpawnPosManager.Ins.GetPos(0).position;
     }
 
     protected override void BeforeSpawn()
@@ -51,7 +41,10 @@ public class EnemySpawner : Spawner
     {
         base.AfterSpawn(obj);
         EnemyCtrl enemyCtrl = obj.GetComponent<EnemyCtrl>();
-        enemyCtrl.enemyMoverment.SetTarget(this.target);
+        enemyCtrl.enemyMovement.SetTarget(this.target);
+
+        int gameLevel = GameLevelManager.Ins.GetLevel();
+        enemyCtrl.enemyLevel.SetLevel(gameLevel);
     }
 
     protected virtual string GetEnemyName()

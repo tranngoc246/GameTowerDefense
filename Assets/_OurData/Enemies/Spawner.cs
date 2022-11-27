@@ -11,17 +11,6 @@ public class Spawner : AutoLoadComponent
     [SerializeField] protected float spawnTimer = 0;
     [SerializeField] protected float spawnDelay = 2f;
     [SerializeField] protected float finalSpawnDelay = 2f;
-/*
-    void Start()
-    {
-        StartCoroutine(WaitForSeconds(1.0f));
-    }
-
-    IEnumerator WaitForSeconds(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        Spawning();
-    }*/
 
     private void FixedUpdate()
     {

@@ -1,3 +1,4 @@
+using Spine.Unity;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class EnemyMoverment : AutoLoadComponent
     [SerializeField] protected Transform target;
     [SerializeField] protected float speed = 2f;
     [SerializeField] protected Vector3 direction = Vector3.zero;
+
+    private string _animationState = "";
 
     private void FixedUpdate()
     {
@@ -67,6 +70,10 @@ public class EnemyMoverment : AutoLoadComponent
     protected virtual void Turning()
     {
         if (this.direction.x == 0) return;
+        if (this._animationState != "Walk")
+        {
+            this.ChangeAnimation("Walk");
+        }
         Vector3 scale = this.enemyCtrl.enemy.transform.localScale;
         scale.x = Mathf.Abs(scale.x);
         scale.x *= this.direction.x;
@@ -77,5 +84,18 @@ public class EnemyMoverment : AutoLoadComponent
     public virtual void SetTarget(Transform target)
     {
         this.target = target;
+    }
+
+    public virtual void ChangeAnimation(string AnimationName)  //Names are: Idle, Walk, Dead and Attack
+    {
+        SkeletonAnimation monsterAnimator = this.enemyCtrl.enemy.GetComponent<SkeletonAnimation>();
+        if (monsterAnimator == null) return;
+
+        this._animationState = AnimationName;
+        bool IsLoop = true;
+        if (AnimationName == "Dead") IsLoop = false;
+
+        //set the animation state to the selected one
+        monsterAnimator.AnimationState.SetAnimation(0, AnimationName, IsLoop);
     }
 }

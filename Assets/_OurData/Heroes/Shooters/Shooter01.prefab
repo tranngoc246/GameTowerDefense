@@ -11329,6 +11329,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbbf923d976d714e994db5ba783d021, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
   character: {fileID: 0}
   characterCtrl: {fileID: 0}
   firearm: {fileID: 0}

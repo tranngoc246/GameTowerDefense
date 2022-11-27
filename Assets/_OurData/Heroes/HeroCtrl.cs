@@ -6,12 +6,14 @@ using UnityEngine;
 public class HeroCtrl : AutoLoadComponent
 {
     [Header("Hero")]
+    public HeroesManager heroesManager;
     public Character character;
     public CharacterController characterCtrl;
     public Firearm firearm;
     public Transform armL;
     public Transform armR;
     public HeroProfile heroProfile;
+    public HeroLevel heroLevel;
 
     protected override void LoadComponents()
     {
@@ -26,12 +28,13 @@ public class HeroCtrl : AutoLoadComponent
     {
         if (this.heroProfile != null) return;
         this.heroProfile = GetComponent<HeroProfile>();
+        this.heroLevel = GetComponent<HeroLevel>();
     }
 
     protected virtual void LoadCharacter()
     {
         if (this.character != null) return;
-        this.character = GetComponent<Character>();
+        this.character = transform.GetComponentInChildren<Character>();
     }
 
     protected virtual void LoadCharacterCtrl()
@@ -50,8 +53,8 @@ public class HeroCtrl : AutoLoadComponent
     protected virtual void LoadCharBodyParts()
     {
         if (this.firearm != null) return;
-
-        Transform animation = transform.Find("Animation");
+                
+        Transform animation = transform.GetChild(0).Find("Animation");
         Transform body = animation.Find("Body");
         Transform upper = body.Find("Upper");
         Transform armR1 = upper.Find("ArmR[1]");

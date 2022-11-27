@@ -7,13 +7,23 @@ public class EnemyCtrl : AutoLoadComponent
     [Header("Enemy")]
     public Rigidbody enemyRgbody;
     public Transform enemy;
-    public EnemyMoverment enemyMoverment;
+    public EnemyMoverment enemyMovement;
+    public DamageReceiver damageReceiver;
+    public EnemyLevel enemyLevel;
 
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadRigidbody();
         this.LoadEnemy();
+        this.LoadDamageReceiver();
+    }
+
+    protected virtual void LoadDamageReceiver()
+    {
+        if (this.damageReceiver) return;
+        this.damageReceiver = GetComponent<DamageReceiver>();
+        this.enemyLevel = GetComponent<EnemyLevel>();
     }
 
     protected virtual void LoadRigidbody()
@@ -29,7 +39,7 @@ public class EnemyCtrl : AutoLoadComponent
     {
         if (this.enemy) return;
         this.enemy = transform.Find("Enemy");
-        this.enemyMoverment = transform.Find("EnemyMovement").GetComponent<EnemyMoverment>();
+        this.enemyMovement = transform.Find("EnemyMovement").GetComponent<EnemyMoverment>();
 
         Debug.Log(transform.name + ": LoadEnemy");
     }

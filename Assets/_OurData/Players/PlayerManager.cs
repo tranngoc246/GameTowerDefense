@@ -8,6 +8,8 @@ public class PlayerManager : AutoLoadComponent
     public PlayerMovement playerMovement;
     public PlayerAttacking playerAttacking;
     public HeroCtrl currentHero;
+    public PlayerInput playerInput;
+    public string firstClass = "Shooter";
 
     private void Awake()
     {
@@ -25,24 +27,27 @@ public class PlayerManager : AutoLoadComponent
 
         this.playerMovement = gameObject.GetComponentInChildren<PlayerMovement>();
         this.playerAttacking = gameObject.GetComponentInChildren<PlayerAttacking>();
+        this.playerInput = gameObject.GetComponentInChildren<PlayerInput>();
+
+        Debug.Log(transform.name + ": LoadComponent");
     }
 
     protected virtual void LoadPlayer()
     {
+        HeroCtrl heroCtrl;
         Vector3 vec3 = transform.position;
-        vec3.x = -8f;
-        vec3.y = -2.895f;
         foreach(HeroesManager obj in HeroTypeManagers.Ins.heroesManagers)
         {
-            vec3.x += 3;
-            GameObject hero = obj.GetHero();
-            hero.transform.position = vec3;
-            hero.transform.parent = PlayersHolder.Ins.transform;
+            string className = obj.heroProfile.HeroClass();
+            if (className != this.firstClass) continue;
 
-            HeroCtrl heroCtrl = hero.GetComponent<HeroCtrl>();
+            heroCtrl = obj.GetHero();
+            heroCtrl.transform.position = vec3;
+            heroCtrl.transform.parent = PlayersHolder.Ins.transform;
+
             PlayersHolder.Ins.heroCtrls.Add(heroCtrl);
 
-            SetPlayerCtrl(hero);
+            SetPlayerCtrl(heroCtrl.gameObject);
         }
     }
 
@@ -50,7 +55,7 @@ public class PlayerManager : AutoLoadComponent
     {
         foreach(HeroCtrl hero in PlayersHolder.Ins.heroCtrls)
         {
-            if(hero.heroProfile.HeroClass == heroClass)
+            if(hero.heroProfile.HeroClass() == heroClass)
             {
                 SetPlayerCtrl(hero.gameObject);
                 return true;

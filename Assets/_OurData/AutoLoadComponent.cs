@@ -15,7 +15,6 @@ public class AutoLoadComponent : MonoBehaviour
     private void Awake()
     {
         this.LoadComponents();
-        this.ResetValue();
     }
 
     protected virtual void ResetValue() { }
